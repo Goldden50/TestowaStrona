@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator</title>
+    <link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <form name="Calculator">
+        <input id="operation" name="operation" type="text" readonly>
+        <div id="result-container"> Wynik: <input id="result-output" name="result" type="text" readonly></div>
+        <div id="blockFirst">
+        <input class="button" type="button" value="7" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="8" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="9" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="4" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="5" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="6" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="1" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="2" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="3" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="0" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="C" onclick="operationObj.value = ''; resultObj.value = ''">
+        <input class="button" type="button" value="=" onclick="Calculate()">
+    </div>
+    <div id="blockSecond">
+        <input class="button" type="button" value="+" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="-" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="*" onclick="operationObj.value+=this.value">
+        <input class="button" type="button" value="/" onclick="operationObj.value+=this.value">
+    </div>
+        <div id="blockThird">
+        <input class="button" type="button" value="M" onclick="MemoryOperation('M');">
+        <input class="button" type="button" value="M+" onclick="MemoryOperation('+')">
+        <input class="button" type="button" value="M-" onclick="MemoryOperation('-')">
+    </div>
+    </form>
+
+    <div id="output">d</div>
+
+    <script type="text/javascript">   
+    //DEKLARACJA ZMIENNYCH
+    var operationObj = document.forms.Calculator.operation;
+    var resultObj = document.forms.Calculator.result;
+    outputObj = document.getElementById("output");
+    outputObj.style.display = "none";
+    var memory;
+
+    //PRZYŁĄCZANIE SIE DO EVENTU NACIŚNIĘCIA PRZYCISKU
+    document.addEventListener('keydown', (event) => {
+        outputObj.style.display = "block";
+    outputObj.innerHTML = "Można wpisywać jedynie za pomocą przycisków na stronie";
+    setTimeout(() => {outputObj.style.display = "none";}, 3000);
+    });
+
+    //funkcja która wykonuje obliczenie
+    function Calculate()
+    {
+        var num1 = '', num2 = '', mathOperator = '';
+        var currentStage = 0; //numer, który aktualnie wczytuje
+
+        for(var i=0; i<operationObj.value.length; i++) //sprawdza każdy znak w polu operacji
+        {
+            currentSign = operationObj.value[i];
+            if(currentSign >= '0' && currentSign <= '9') //jeżeli jest liczbą
+            {
+                if(currentStage == 0) num1 += currentSign;
+                else num2 += currentSign;
+            }
+            else //w przeciwnym wypadku jest operatorem matematycznym
+            {
+                if(mathOperator != '') //jeżeli już jest operator matematyczny
+                {
+                    if(num2 != '') //jeżeli podano dwie liczby, oblicz je
+                    {
+                        a = Number(num1);
+                        b = Number(num2);
+                        switch(mathOperator)
+                        {
+                            case '+': num1 = a+b; break;
+                            case '-': num1 = a-b; break;
+                            case '*': num1 = a*b; break;
+                            case '/': if(b == 0) 
+                                {
+                                    resultObj.value = "Nie można dzielić przez 0";
+                                    return;
+                                } 
+                                num1 = a/b;
+                                break;
+                        }
+                        num2 = '';
+                    }
+                    else //w przeciwnym wypadku podano 2 znaki arytmetyczne obok siebie, co jest błędem
+                    {
+                        resultObj.value = "Podano złe działanie";
+                        return;
+                    }
+                }
+                
+                mathOperator = currentSign;
+                currentStage = 1;
+            }
+        }
+
+        //OBLICZANIE WYNIKU
+        var result = 0;
+        a = Number(num1);
+        b = Number(num2);
+
+        switch(mathOperator)
+        {
+            case '+': result = a+b; break;
+            case '-': result = a-b; break;
+            case '*': result = a*b; break;
+            case '/': 
+                if(b == 0) 
+                {
+                       resultObj.value = "Nie można dzielić przez 0";
+                       return;
+                } 
+                result = a/b;
+                break;
+        }
+        resultObj.value = result;
+    }
+
+    //funkcja która odpowiada za operacje na pamięci
+    function MemoryOperation(operator)
+    {
+        if(operator == 'M') //jeżeli ma wypisac
+        {
+            if(memory == null) return;
+
+            lastSign = operationObj.value[operationObj.value.length-1]; //wczytuje ostatni znak operacji
+            if(lastSign >= '0' && lastSign <= '9') //jeżeli użytkownik jako ostatnie podał liczbe, to dodaj memory
+            {
+                if(memory < 0) operationObj.value += '-';
+                else operationObj.value += '+';
+            }
+
+            operationObj.value += Math.abs(memory);
+            return;
+        }
+
+        var currentNumber = 0;
+ 
+        if(resultObj.value != '')
+        {
+            if(!isNaN(resultObj.value))
+                currentNumber = resultObj.value;
+        }
+        else
+        {
+            outputObj.style.display = "block";
+            outputObj.innerHTML = ("Przed operowaniem w pamięci, kliknij równa się");
+            setTimeout(() => {outputObj.style.display = "none";}, 3000);
+        }
+
+        if(memory == null) //jeżeli nie ma nic w pamięci
+        {
+            if(operator == '-') memory = -currentNumber;
+            else memory = currentNumber;
+        }
+        else
+        {
+            num1 = Number(memory);
+            num2 = Number(currentNumber);
+            switch (operator)
+            {
+                case '+': memory = num1 + num2; break;
+                case '-': memory = num1 - num2; break;
+            }
+        }
+
+    }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+body
+{
+    background-color: rgb(192, 255, 235);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+form
+{
+    /*pozycja*/
+    width: 50%;
+    max-width: 300px;
+    height: 475px;
+    margin-left: 50%;
+    margin-top: 15%;
+    transform: translate(-50%, 0);
+    position: block;
+    padding: 0;
+    /*wygląd*/
+    background-color: #909090;
+}
+
+#operation
+{
+    background-color: #c0c0c0;
+    width: 95%;
+    height: 50px;
+    font-size: x-large;
+    padding: 0 2.5%;
+}
+
+#result-container
+{
+    width: 95%;
+    padding: 2.5%;
+    height: 30px;;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+#result-output
+{
+    background-color: #c0c0c0;
+
+    width: 65%;
+    padding: 0 2.5%;
+    height: 100%;
+    float: right;
+    font-size: large;
+
+}
+
+.button
+{
+    background-color: #A0A0A0;
+    height: 75px;
+    font-weight: bold;
+}
+
+#blockFirst
+{
+    width: 73%;
+    float: left;
+    margin: 0;
+}
+
+#blockFirst .button
+{
+    margin-left: 0.1%;
+    margin-right: 0.1%;
+    width: 33%;
+    float:left;
+}
+
+#blockSecond
+{
+    width: 25%;
+    float: left;
+}
+
+#blockSecond .button
+{
+    width: 100%;
+    float: left;
+}
+
+#blockThird
+{
+    width: 100%;
+    float: left;
+}
+
+#blockThird .button
+{
+    width: 33%;
+    float: left;
+}
+
+#output
+{
+    width: 10%;
+    height: auto;
+    margin-top: 50px;
+    margin-left: 50%;
+    transform: translate(-50%, 0);
+    /*wygląd*/
+    background-color: #909090;
+    text-align: center;
+    padding: 5px;
+    font-weight: bold;
+}
